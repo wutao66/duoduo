@@ -43,6 +43,9 @@ jobs:
           '```text' >> $env:GITHUB_STEP_SUMMARY
           Get-Content build.log -Tail 100 >> $env:GITHUB_STEP_SUMMARY
           '```' >> $env:GITHUB_STEP_SUMMARY
+          $diagnostic = (Get-Content build.log -Tail 40) -join "`n"
+          $diagnostic = $diagnostic.Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+          Write-Host "::error title=Windows build diagnostics::$diagnostic"
 
       - name: Upload installer
         if: success()
